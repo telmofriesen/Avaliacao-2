@@ -34,6 +34,23 @@
                 <tr>
                     <td class="left_filler"/>
                     <td id="content">
+                        <h:form>
+                            <div class="titulo-form" style="text-align: center">REVENDEDORES</div>
+                            
+                            <h:panelGrid columns="2">
+                                <h:panelGroup layout="block">
+                                    <h:outputLink id="link1" value="cadastro.xhtml">
+                                        <h:outputText value="Cadastro" />
+                                    </h:outputLink>
+                                </h:panelGroup>
+                                <h:panelGroup layout="block">
+                                    <h:outputLink id="link2" value="consulta.xhtml">
+                                        <h:outputText value="Consulta" />
+                                    </h:outputLink>
+                                </h:panelGroup>
+                            </h:panelGrid>
+                        </h:form>
+                        
                         <ui:insert name="content">Content</ui:insert>
                     </td>
                     <td class="right_filler"/>

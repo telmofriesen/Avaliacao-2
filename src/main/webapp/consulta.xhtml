@@ -35,13 +35,45 @@
     <ui:define name="content">
         <h:form>
             <h:panelGroup style="text-align: left; margin-bottom: 10px;" layout="block">
-                <h:panelGroup styleClass="form-block" layout="block">
-                    <h:outputLabel for="cpf" value="Cpf"/>
-                    <h:inputText id="cpf" value="#{consultaBean.cpf}" label="Cpf" size="15" required="true"/>
-                    <c:if test="#{consultaBean.cpfInvalido}"> <h:outputLabel styleClass="red">*Cpf não encontrado" </h:outputLabel> </c:if>
-                </h:panelGroup>
+                <ice:dataTable 
+                    value="#{consultaBean.revendedoresDataModel}"
+                    var="revendedor"
+                    >
+                    
+                    <ice:column>
+                        <f:facet name="header">
+                            <ice:commandSortHeader columnName="cnpj">
+                               CNPJ
+                            </ice:commandSortHeader>
+                        </f:facet>
+                        #{revendedor.cnpj}
+                    </ice:column>
+                    <ice:column>
+                        <f:facet name="header">
+                            <ice:commandSortHeader columnName="nomeFantasia">
+                               Nome Fantasia
+                            </ice:commandSortHeader>
+                        </f:facet>
+                        #{revendedor.nomeFantasia}
+                    </ice:column>
+                    <ice:column>
+                        <f:facet name="header">
+                            <ice:commandSortHeader columnName="cidade">
+                               Cidade
+                            </ice:commandSortHeader>
+                        </f:facet>
+                        #{revendedor.cidade}
+                    </ice:column>
+                    <ice:column>
+                        <f:facet name="header">
+                            <ice:commandSortHeader columnName="estado">
+                               Estado
+                            </ice:commandSortHeader>
+                        </f:facet>
+                        #{revendedor.estado.descricao}
+                    </ice:column>
+                </ice:dataTable> 
             </h:panelGroup>
-            <h:commandButton value="Consultar" action="#{consultaBean.consultaAction}"/>
             <h:messages/>
         </h:form>
     </ui:define>

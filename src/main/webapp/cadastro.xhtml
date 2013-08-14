@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ice="http://www.icesoft.com/icefaces/component"
+                xmlns:ace="http://www.icefaces.org/icefaces/components"
+                template="./WEB-INF/templates/layout.xhtml">
+
+    <ui:define name="styles">
+        <style type="text/css">
+            .titulo-form {
+                font-size: 14pt;
+                font-weight: bold;
+                margin: 10px 0;
+            }
+            .iceOutLbl {
+                display: inline-block;
+                margin-left: 4px;
+                width: 50px;
+            }
+            
+            .icePnlGrp {
+                margin-top: 4px;
+            }
+        </style>
+    </ui:define>
+    
+    <ui:define name="metadata">
+    </ui:define>
+
+    <ui:define name="javascript">
+    </ui:define>
+
+    <ui:define name="content">
+        <ice:form>
+            <ice:panelGroup style="text-align: left; margin-bottom: 10px;">
+                <ice:outputLabel for="cnpj" value="CNPJ"/>
+                <ace:maskedEntry id="cnpj" value="#{cadastroBean.revendedor.cnpj}"  mask="99.999.999/9999-99"
+                             label="CNPJ" size="15" required="true">
+                    <f:validator validatorId="CPFValidator"/>
+                    <f:converter converterId="CPFConverter"/>
+                </ace:maskedEntry>
+            </ice:panelGroup>
+            <ice:panelGroup style="text-align: left; margin-bottom: 10px;">
+                <ice:outputLabel for="razaoSocial" value="Razao Social"/>
+                <ice:inputText id="razaoSocial" value="#{cadastroBean.revendedor.razaoSocial}" size="50"
+                          styleClass="ui-inputfield" label="Razao Social" maxlength="80" required="true"/>
+            </ice:panelGroup>
+            <ice:panelGroup style="text-align: left; margin-bottom: 10px;">
+                <ice:outputLabel for="nomeFantasia" value="Nome Fantasia"/>
+                <ice:inputText id="nomeFantasia" value="#{cadastroBean.revendedor.nomeFantasia}" size="50"
+                          styleClass="ui-inputfield" label="Nome Fantasia" maxlength="80" required="true"/>
+            </ice:panelGroup>
+            <ice:panelGroup style="text-align: left; margin-bottom: 10px;">
+                <ice:outputLabel for="endereco" value="Endereco"/>
+                <ice:inputText id="endereco" value="#{cadastroBean.revendedor.endereco}" size="50"
+                          styleClass="ui-inputfield" label="Endereco" maxlength="80" required="true"/>
+            </ice:panelGroup>
+            <ice:panelGroup style="text-align: left; margin-bottom: 10px;">
+                <ice:outputLabel for="cidade" value="Cidade"/>
+                <ice:inputText id="cidade" value="#{cadastroBean.revendedor.cidade}" size="50"
+                          styleClass="ui-inputfield" label="Cidade" maxlength="80" required="true"/>
+                <ice:outputLabel for="estado" value="Estado"/>
+                <ice:selectOneMenu id="estado" value="#{cadastroBean.revendedor.estado.codigo}" style="width:12em" styleClass="ui-selectonemenu">
+                    <f:selectItems value="#{cadastroBean.estados}" var="i" itemValue="#{i.codigo}" itemLabel="#{i.descricao}"/>
+                </ice:selectOneMenu>
+            </ice:panelGroup>
+            <ice:panelGroup style="text-align: left; margin-bottom: 10px;">
+                <ice:outputLabel for="regiaoDeAtuacao" value="Regiao De Atuacao"/>
+                <ice:selectOneMenu id="regiaoDeAtuacao" value="#{cadastroBean.revendedor.regiaoDeAtuacao}" style="width:12em" styleClass="ui-selectonemenu" valueChangeListener="#{cadastroBean.atualizarEstados}" partialSubmit="true">
+                    <f:selectItems value="#{cadastroBean.regioes}" var="i" itemValue="#{i.codigo}" itemLabel="#{i.descricao}"/>
+                </ice:selectOneMenu>
+                <ice:outputLabel for="estadoDeAtuacao" value="Estado"/>
+                <ice:selectOneMenu id="estadoDeAtuacao" value="#{cadastroBean.revendedor.estadoDeAtuacao}" style="width:12em" styleClass="ui-selectonemenu">
+                    <f:selectItems value="#{cadastroBean.revendedor.regiaoDeAtuacao.estados}" var="i" itemValue="#{i.codigo}" itemLabel="#{i.descricao}"/>
+                </ice:selectOneMenu>
+            </ice:panelGroup>
+            <ice:commandButton value="Continuar" action="#{cadastroBean.cadastroAction}" style="margin-top: 1em"/>
+            
+            <ice:messages/>
+        </ice:form>
+    </ui:define>
+
+</ui:composition>
