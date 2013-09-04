@@ -4,6 +4,7 @@
  */
 package inscricao.faces.validator;
 
+import inscricao.faces.mngbeans.CadastrosBean;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -23,8 +24,20 @@ public class CNPJValidator implements Validator {
     public void validate(FacesContext fc, UIComponent uic, Object o) throws ValidatorException {
         String cnpj = String.format("%014d", (Long) o);
         if (!cnpj.matches("\\d{14}")) {        
-            throw new ValidatorException(new FacesMessage("CPF \'" + cnpj + "\' em formato incorreto."));
+            throw new ValidatorException(new FacesMessage("CNPJ \'" + cnpj + "\' em formato incorreto."));
         } else {
+            if (Long.parseLong(cnpj)/1000000 <= 0 || (Long.parseLong(cnpj)/100) % 10000 <= 0) {
+                throw new ValidatorException(new FacesMessage("CNPJ \'" + cnpj + "\' em formato incorreto."));
+            }
+            
+            CadastrosBean cadastrosBean = (CadastrosBean) 
+                    FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(
+                    FacesContext.getCurrentInstance(), "#{cadastrosBean}", Object.class);
+            
+            if (cadastrosBean.existeCadastro(Long.parseLong(cnpj))) {
+                throw new ValidatorException(new FacesMessage("CNPJ já cadastrado."));
+            }
+            
             //DigitoVerificadorCPF dvcpf = new DigitoVerificadorCPF(cpf.substring(0, 9));
             //int dv = Integer.parseInt(cpf.substring(9, 11));
             //if (!dvcpf.isValido(dv)) {

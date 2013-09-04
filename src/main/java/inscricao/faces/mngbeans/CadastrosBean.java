@@ -24,6 +24,13 @@ public class CadastrosBean extends PageBean {
     
     private static HashMap<Long, Revendedor> cadastros = new HashMap<> ();
     
+    public boolean existeCadastro(Long cnpj){
+        if (cadastros.containsKey(cnpj)) {
+            return true;
+        }
+        return false;
+    }
+    
     public boolean adicionarCadastro(Revendedor r){
         if (!cadastros.containsKey(r.getCnpj())) {
             cadastros.put(r.getCnpj(), r);

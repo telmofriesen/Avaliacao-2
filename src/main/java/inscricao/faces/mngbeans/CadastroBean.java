@@ -18,6 +18,9 @@ import javax.persistence.EntityManager;
 import utfpr.faces.support.PageBean;
 import utfpr.persistence.controller.IdiomaJpaController;
 import utfpr.persistence.controller.JpaController;
+import com.icesoft.faces.component.ext.HtmlSelectOneMenu;
+import java.util.Iterator;
+import javax.faces.component.UISelectItems;
 
 /**
  *
@@ -26,22 +29,16 @@ import utfpr.persistence.controller.JpaController;
 @ManagedBean
 @SessionScoped
 public class CadastroBean extends PageBean {
-    
-    private Revendedor revendedor = new Revendedor(); // inicialmente ingles
-    private boolean cnpjInvalido = false;
 
-    public CadastroBean(){
-        revendedor.setEstado(getEstados().get(1));
-        revendedor.setRegiaoDeAtuacao(getRegioes().get(1));
-        revendedor.setEstadoDeAtuacao(getRegioes().get(1).getEstados().get(1));
-    }
+    public static final String PLEASE_SELECT = "Selecione...";
+    public static final String TOPLEVEL_LOOKUP_VALUE = "9999999";
     
-    public boolean isCnpjInvalido() {
-        return cnpjInvalido;
-    }
+    private Revendedor revendedor = new Revendedor();
+    private ArrayList<Regiao> regioes = Regiao.getRegioes();
+    private transient HtmlSelectOneMenu menuRegiaoDeAtuacao;
+    private transient HtmlSelectOneMenu menuEstadoDeAtuacao;
 
-    public void setCnpjInvalido(boolean cnpjInvalido) {
-        this.cnpjInvalido = cnpjInvalido;
+    public CadastroBean() {
     }
 
     public Revendedor getRevendedor() {
@@ -51,72 +48,138 @@ public class CadastroBean extends PageBean {
     public void setRevendedor(Revendedor revendedor) {
         this.revendedor = revendedor;
     }
-    
-    public List<Estado> getEstados() {
-        ArrayList<Estado> estados = new ArrayList<>();
-        
-        estados.add(new Estado(1, "Parana"));
-        estados.add(new Estado(2, "Santa Catarina"));
-        estados.add(new Estado(3, "Rio Grande do Sul"));
-        estados.add(new Estado(4, "Sao Paulo"));
-        estados.add(new Estado(5, "Rio de Janeiro"));
-        
-        return new ArrayList<> (estados);
-    }
-    
+
     public List<Regiao> getRegioes() {
-        ArrayList<Regiao> regioes = new ArrayList<>();
-        
-        ArrayList<Estado> asul = new ArrayList<>();
-        
-        asul.add(new Estado(1, "Parana"));
-        asul.add(new Estado(2, "Santa Catarina"));
-        asul.add(new Estado(3, "Rio Grande do Sul"));
-        
-        ArrayList<Estado> asudeste = new ArrayList<>();
-        
-        asudeste.add(new Estado(4, "Sao Paulo"));
-        asudeste.add(new Estado(5, "Rio de Janeiro"));
-        
-        Regiao sul = new Regiao(1, "Sul");
-        sul.setEstados(asul);
-        Regiao sudeste = new Regiao(2, "Sudeste");
-        sudeste.setEstados(asudeste);
-        
-        regioes.add(sul);
-        regioes.add(sudeste);
-        
-        return new ArrayList<> (regioes);
+        return regioes;
     }
-    
+
+    public List<Estado> getEstados() {
+
+        ArrayList<Estado> todosEstados = new ArrayList<>();
+        for (Regiao regiao : regioes) {
+            List<Estado> estados = regiao.getEstados();
+            for (Estado estado : estados) {
+                todosEstados.add(estado);
+            }
+        }
+        return todosEstados;
+    }
+
     public List<Estado> getRegiaoEstados() {
         return revendedor.getRegiaoDeAtuacao().getEstados();
     }
+
+    public HtmlSelectOneMenu getMenuRegiaoDeAtuacao() {
+        if (menuRegiaoDeAtuacao == null) {
+            menuRegiaoDeAtuacao = new HtmlSelectOneMenu();
+            menuRegiaoDeAtuacao.setVisible(false);
+            
+            List<SelectItem> list = createSelectItemsRegioes(regioes);
+            UISelectItems items = new UISelectItems();
+            items.setValue(list);
+            menuRegiaoDeAtuacao.getChildren().add(items);
+        }
+        
+        return menuRegiaoDeAtuacao;
+    }
     
-    public void atualizarEstados(ValueChangeEvent event) {
- 
-        //String selectedText = event.getNewValue().toString();
-        revendedor.setEstadoDeAtuacao(revendedor.getRegiaoDeAtuacao().getEstados().get(0));
+    public HtmlSelectOneMenu getMenuEstadoDeAtuacao() {
+        if (menuEstadoDeAtuacao == null) {
+            menuEstadoDeAtuacao = new HtmlSelectOneMenu();
+            menuEstadoDeAtuacao.setVisible(false);
+        }
+        return menuEstadoDeAtuacao;
+    }
+
+    public void setMenuRegiaoDeAtuacao(HtmlSelectOneMenu menu) {
+        this.menuRegiaoDeAtuacao = menu;
+    }
+
+    public void setMenuEstadoDeAtuacao(HtmlSelectOneMenu menu) {
+        this.menuEstadoDeAtuacao = menu;
+    }
+
+    public void menuRegiaoDeAtuacaoChanged(ValueChangeEvent event) {
+        String id = (String) event.getNewValue();
+        int iid = Integer.parseInt((String) event.getNewValue());
+
+        resetRegiaoDeAtuacaoMenu(menuEstadoDeAtuacao, iid);
+    }
+
+    public void menuEstadoDeAtuacaoChanged(ValueChangeEvent event) {
+        String id = (String) event.getNewValue();
+        int iid = Integer.parseInt((String) event.getNewValue());
+
+        revendedor.setEstadoDeAtuacao(null);
+        for (Estado estado: revendedor.getRegiaoDeAtuacao().getEstados()) {
+            if (estado.getCodigo() == iid) {
+                revendedor.setEstadoDeAtuacao(estado);
+            }
+        }
+    }
+    
+    private void resetRegiaoDeAtuacaoMenu(HtmlSelectOneMenu menu, int id) {
+        menu.getChildren().clear();
+
+        for (Regiao regiao : regioes) {
+            if (regiao.getCodigo() == id) {
+                revendedor.setRegiaoDeAtuacao(regiao);
+            }
+        }
+
+        List<SelectItem> list = createSelectItemsEstados(revendedor.getRegiaoDeAtuacao().getEstados());
+        UISelectItems items = new UISelectItems();
+        items.setValue(list);
+        menu.getChildren().add(items);
+        menu.setVisible(true);
+    }
+
+    private List<SelectItem> createSelectItemsEstados(List<Estado> estados) {
+
+        List<SelectItem> list = new ArrayList<>();
+        // add the "please select" item item
+        list.add(0, new SelectItem(TOPLEVEL_LOOKUP_VALUE, PLEASE_SELECT));
+        for (Iterator<Estado> iter = estados.iterator(); iter.hasNext();) {
+            Estado e = iter.next();
+            String id = String.valueOf(e.getCodigo());
+            String areaName = e.getDescricao();
+            SelectItem si = new SelectItem(id, areaName);
+            list.add(si);
+        }
+        return list;
+    }
+
+    private List<SelectItem> createSelectItemsRegioes(List<Regiao> regioes) {
+
+        List<SelectItem> list = new ArrayList<>();
+        // add the "please select" item item
+        list.add(0, new SelectItem(TOPLEVEL_LOOKUP_VALUE, PLEASE_SELECT));
+        for (Iterator<Regiao> iter = regioes.iterator(); iter.hasNext();) {
+            Regiao e = iter.next();
+            String id = String.valueOf(e.getCodigo());
+            String areaName = e.getDescricao();
+            SelectItem si = new SelectItem(id, areaName);
+            list.add(si);
+        }
+        return list;
     }
     
     public String cadastroAction() {
 
-        CadastrosBean cadastrosBean = (CadastrosBean)getBean("cadastrosBean");
-        
+        CadastrosBean cadastrosBean = (CadastrosBean) getBean("cadastrosBean");
+
 //        if (editarInscricao) {
 //            if (inscricoesBean.atualizarInscricao(candidato))
 //                return "confirma";
 //            else
 //                return null;
-//            
+//
 //        } else {
         if (cadastrosBean.adicionarCadastro(revendedor)) {
             revendedor = new Revendedor();
             return "consulta";
         } else {
-            cnpjInvalido = true;
             return "cadastro";
         }
     }
-
 }

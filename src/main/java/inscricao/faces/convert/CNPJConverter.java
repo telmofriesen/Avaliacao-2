@@ -24,7 +24,11 @@ public class CNPJConverter implements Converter {
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object o) {
         Long cnpj = (Long) o;
-        return String.format("%02d.%03d.%03d/%04d-%02d", cnpj / 100, cnpj % 100);
-    }
-    
+        long p1 = cnpj;
+        long p2 = p1/100;
+        long p3 = p2/10000;
+        long p4 = p3/1000;
+        long p5 = p4/1000;
+        return String.format("%02d.%03d.%03d/%04d-%02d", p5%100, p4%1000, p3%1000, p2%10000, p1%100);
+    }   
 }

@@ -11,6 +11,15 @@ package inscricao.persistence.entity;
 public class Estado {
     private Integer codigo;
     private String descricao;
+    private Regiao regiao;
+
+    public Regiao getRegiao() {
+        return regiao;
+    }
+
+    public void setRegiao(Regiao regiao) {
+        this.regiao = regiao;
+    }
     
     public Integer getCodigo() {
         return codigo;
@@ -38,5 +47,11 @@ public class Estado {
     public Estado(Integer codigo, String descricao) {
         this.codigo = codigo;
         this.descricao = descricao;
+    }
+    
+    public Estado(Integer codigo, String descricao, Regiao regiao) {
+        this.codigo = codigo;
+        this.descricao = descricao;
+        this.regiao = regiao;
     }
 }

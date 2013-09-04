@@ -20,6 +20,12 @@ public class Revendedor {
     private Regiao regiaoDeAtuacao;
     private Estado estadoDeAtuacao;
 
+    public Revendedor(){
+        estado = new Estado(-1, "");
+        regiaoDeAtuacao = new Regiao(-1, "");
+        estadoDeAtuacao = new Estado(-1, "", regiaoDeAtuacao);
+    }
+    
     public Estado getEstadoDeAtuacao() {
         return estadoDeAtuacao;
     }

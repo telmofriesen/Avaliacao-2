@@ -4,6 +4,7 @@
  */
 package inscricao.faces.validator;
 
+import inscricao.faces.mngbeans.CadastroBean;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -16,20 +17,15 @@ import utfpr.util.DigitoVerificadorCPF;
  *
  * @author Wilson
  */
-@FacesValidator("CNPJValidator")
-public class CNPJValidator implements Validator {
+@FacesValidator("RegiaoValidator")
+public class RegiaoValidator implements Validator {
 
     @Override
     public void validate(FacesContext fc, UIComponent uic, Object o) throws ValidatorException {
-        String cnpj = String.format("%014d", (Long) o);
-        if (!cnpj.matches("\\d{14}")) {        
-            throw new ValidatorException(new FacesMessage("CPF \'" + cnpj + "\' em formato incorreto."));
-        } else {
-            //DigitoVerificadorCPF dvcpf = new DigitoVerificadorCPF(cpf.substring(0, 9));
-            //int dv = Integer.parseInt(cpf.substring(9, 11));
-            //if (!dvcpf.isValido(dv)) {
-             //   throw new ValidatorException(new FacesMessage("CPF \'" + cpf + "\' inválido"));
-            //}
+
+        if (((String) o).equals(CadastroBean.TOPLEVEL_LOOKUP_VALUE)) {
+            // Selecione selecionado
+            throw new ValidatorException(new FacesMessage("Regiao invalida"));
         }
     }
     
