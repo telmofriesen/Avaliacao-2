@@ -16,11 +16,14 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
 import utfpr.faces.support.PageBean;
-import utfpr.persistence.controller.IdiomaJpaController;
+import utfpr.persistence.controller.EstadoJpaController;
 import utfpr.persistence.controller.JpaController;
 import com.icesoft.faces.component.ext.HtmlSelectOneMenu;
 import java.util.Iterator;
 import javax.faces.component.UISelectItems;
+import utfpr.persistence.controller.EstadoJpaController;
+import utfpr.persistence.controller.RegiaoJpaController;
+import utfpr.persistence.controller.RevendedorJpaController;
 
 /**
  *
@@ -34,11 +37,31 @@ public class CadastroBean extends PageBean {
     public static final String TOPLEVEL_LOOKUP_VALUE = "9999999";
     
     private Revendedor revendedor = new Revendedor();
-    private ArrayList<Regiao> regioes = Regiao.getRegioes();
+    private ArrayList<Regiao> regioes = new ArrayList<>();
     private transient HtmlSelectOneMenu menuRegiaoDeAtuacao;
     private transient HtmlSelectOneMenu menuEstadoDeAtuacao;
 
-    public CadastroBean() {
+    public CadastroBean() throws ClassNotFoundException {
+        
+        EstadoJpaController ejc = new EstadoJpaController();
+        RegiaoJpaController rjc = new RegiaoJpaController();
+        RevendedorJpaController rvjc = new RevendedorJpaController();
+        
+        Regiao sudeste = new Regiao(2,"Sudeste");
+        Estado parana = new Estado(2, "São Paulo", sudeste);
+        Revendedor rev = new Revendedor();
+        rev.setCnpj(new Long(879873));
+        rev.setRazaoSocial("razao social");
+        rev.setNomeFantasia("nome fantasia");
+        rev.setEndereco("endereco");
+        rev.setCidade("cidade");
+        rev.setEstado(parana);
+        rev.setRegiaoDeAtuacao(sudeste);
+        rev.setEstadoDeAtuacao(parana);
+        
+        rjc.persist(sudeste);
+        ejc.persist(parana);
+        rvjc.persist(rev);
     }
 
     public Revendedor getRevendedor() {
@@ -56,17 +79,13 @@ public class CadastroBean extends PageBean {
     public List<Estado> getEstados() {
 
         ArrayList<Estado> todosEstados = new ArrayList<>();
-        for (Regiao regiao : regioes) {
-            List<Estado> estados = regiao.getEstados();
-            for (Estado estado : estados) {
-                todosEstados.add(estado);
-            }
-        }
         return todosEstados;
     }
 
     public List<Estado> getRegiaoEstados() {
-        return revendedor.getRegiaoDeAtuacao().getEstados();
+
+        ArrayList<Estado> todosEstados = new ArrayList<>();
+        return todosEstados;
     }
 
     public HtmlSelectOneMenu getMenuRegiaoDeAtuacao() {
@@ -110,12 +129,12 @@ public class CadastroBean extends PageBean {
         String id = (String) event.getNewValue();
         int iid = Integer.parseInt((String) event.getNewValue());
 
-        revendedor.setEstadoDeAtuacao(null);
-        for (Estado estado: revendedor.getRegiaoDeAtuacao().getEstados()) {
-            if (estado.getCodigo() == iid) {
-                revendedor.setEstadoDeAtuacao(estado);
-            }
-        }
+//        revendedor.setEstadoDeAtuacao(null);
+//        for (Estado estado: revendedor.getRegiaoDeAtuacao().getEstados()) {
+//            if (estado.getCodigo() == iid) {
+//                revendedor.setEstadoDeAtuacao(estado);
+//            }
+//        }
     }
     
     private void resetRegiaoDeAtuacaoMenu(HtmlSelectOneMenu menu, int id) {
@@ -127,11 +146,11 @@ public class CadastroBean extends PageBean {
             }
         }
 
-        List<SelectItem> list = createSelectItemsEstados(revendedor.getRegiaoDeAtuacao().getEstados());
-        UISelectItems items = new UISelectItems();
-        items.setValue(list);
-        menu.getChildren().add(items);
-        menu.setVisible(true);
+//        List<SelectItem> list = createSelectItemsEstados(revendedor.getRegiaoDeAtuacao().getEstados());
+//        UISelectItems items = new UISelectItems();
+//        items.setValue(list);
+//        menu.getChildren().add(items);
+//        menu.setVisible(true);
     }
 
     private List<SelectItem> createSelectItemsEstados(List<Estado> estados) {

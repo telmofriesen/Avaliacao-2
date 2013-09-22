@@ -17,6 +17,8 @@
         <icefaces.version>3.3.0</icefaces.version>
         <hibernate.core.version>4.2.3.Final</hibernate.core.version>
         <hibernate.ehcache.version>${hibernate.core.version}</hibernate.ehcache.version>
+        <!--<hibernate.core.version>4.2.3.Final</hibernate.core.version>
+        <net.sf.ehcache.version>2.2.0</net.sf.ehcache.version>-->
         <hibernate.jpamodelgen.version>1.2.0.Final</hibernate.jpamodelgen.version>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
     </properties>
@@ -82,9 +84,20 @@
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
             <artifactId>hibernate-ehcache</artifactId>
             <version>${hibernate.ehcache.version}</version>
         </dependency>
+        <!--<dependency>  
+            <groupId>net.sf.ehcache</groupId>  
+            <artifactId>ehcache</artifactId>  
+            <version>${net.sf.ehcache.version}</version>
+            <type>pom</type>  
+        </dependency>-->
         <dependency>
             <!-- Necessário para gerar as classes JPA metamodel -->
             <groupId>org.hibernate</groupId>
@@ -97,6 +110,11 @@
             <artifactId>slf4j-simple</artifactId>
             <version>1.6.1</version>
             <type>jar</type>
+        </dependency>
+        <dependency>
+             <groupId>postgresql</groupId>
+             <artifactId>postgresql</artifactId>
+             <version>8.3-603.jdbc4</version>
         </dependency>
         <!-- Dependências do Hibernate JPA -->
 
@@ -181,6 +199,14 @@
         <finalName>inscricao-jsf-2</finalName>
     </build>
     <repositories>
+
+        <!-- for ehcache -->
+        <repository>
+           <id>terracotta-releases</id>
+           <url>http://www.terracotta.org/download/reflector/releases</url>
+           <releases><enabled>true</enabled></releases>
+           <snapshots><enabled>false</enabled></snapshots>
+        </repository>
 
     </repositories>
 </project>
