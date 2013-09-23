@@ -57,8 +57,13 @@ public class RevendedorJpaController extends JpaController {
             em = getEntityManager();
         
             // JPQL
-            TypedQuery<Revendedor> q = em.createQuery("SELECT r FROM Revendedor r WHERE r.nomeFantasia LIKE :nomeFantasia", Revendedor.class);
-            q.setParameter("nomeFantasia", "%"+ filtro +"%");
+            TypedQuery<Revendedor> q = em.createQuery("SELECT r FROM Revendedor r WHERE r.cnpj = :filtroCnpj OR r.nomeFantasia LIKE :filtro OR r.cidade LIKE :filtro OR r.estadoDeAtuacao.descricao LIKE :filtro", Revendedor.class);
+            try {
+                q.setParameter("filtroCnpj", Long.parseLong(filtro));
+            } catch (NumberFormatException e) {
+                q.setParameter("filtroCnpj", new Long(-1));
+            }
+            q.setParameter("filtro", "%"+ filtro +"%");
             List<Revendedor> regioes = q.getResultList();
 
             return regioes;
