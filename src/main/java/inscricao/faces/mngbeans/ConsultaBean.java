@@ -4,6 +4,7 @@
  */
 package inscricao.faces.mngbeans;
 
+import com.icesoft.faces.component.ext.HtmlDataTable;
 import inscricao.persistence.entity.Revendedor;
 import utfpr.persistence.controller.RevendedorJpaController;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class ConsultaBean extends PageBean {
         revendedores = new ArrayList(rjc.getRevendedores());
         revendedoresDataModel = new ListDataModel<>(revendedores);
     }
-    
+
     public ListDataModel<Revendedor> getRevendedoresDataModel() {
         return revendedoresDataModel;
     }
@@ -57,7 +58,8 @@ public class ConsultaBean extends PageBean {
         
         RevendedorJpaController rjc = new RevendedorJpaController();
         revendedores = new ArrayList(rjc.getRevendedores(filtro));
-        revendedoresDataModel = new ListDataModel<>(revendedores);
+//        revendedoresDataModel = new ListDataModel<>(revendedores);
         
+        revendedoresDataModel.setWrappedData(revendedores);
     }
 }
