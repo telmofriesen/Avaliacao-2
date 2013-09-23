@@ -4,7 +4,6 @@
  */
 package inscricao.faces.validator;
 
-import inscricao.faces.mngbeans.CadastrosBean;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;

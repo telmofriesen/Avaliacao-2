@@ -51,6 +51,22 @@ public class RevendedorJpaController extends JpaController {
         }
     }
     
+    public List<Revendedor> getRevendedores(String filtro) {
+        EntityManager em = null;        
+        try {
+            em = getEntityManager();
+        
+            // JPQL
+            TypedQuery<Revendedor> q = em.createQuery("SELECT r FROM Revendedor r WHERE r.nomeFantasia LIKE :nomeFantasia", Revendedor.class);
+            q.setParameter("nomeFantasia", "%"+ filtro +"%");
+            List<Revendedor> regioes = q.getResultList();
+
+            return regioes;
+        } finally {
+            if (em != null) em.close();
+        }
+    }
+    
     public boolean exists(Long cnpj) {
         EntityManager em = null;        
         try {

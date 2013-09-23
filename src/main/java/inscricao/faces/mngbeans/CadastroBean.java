@@ -41,7 +41,7 @@ public class CadastroBean extends PageBean {
     private ArrayList<Estado> estados = null;
     private transient HtmlSelectOneMenu menuRegiaoDeAtuacao;
     private transient HtmlSelectOneMenu menuEstadoDeAtuacao;
-
+    
     public CadastroBean() throws ClassNotFoundException {
         
 //         EstadoJpaController ejc = new EstadoJpaController();
@@ -202,16 +202,6 @@ public class CadastroBean extends PageBean {
     
     public String cadastroAction() {
 
-//        CadastrosBean cadastrosBean = (CadastrosBean) getBean("cadastrosBean");
-
-//        if (editarInscricao) {
-//            if (inscricoesBean.atualizarInscricao(candidato))
-//                return "confirma";
-//            else
-//                return null;
-//
-//        } else {
-        
         RevendedorJpaController rjc = new RevendedorJpaController();
         try {
             rjc.persist(revendedor);

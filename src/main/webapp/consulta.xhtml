@@ -34,6 +34,22 @@
 
     <ui:define name="content">
         <h:form>
+            <ice:panelGroup style="text-align: left; margin-bottom: 10px;">
+                <ice:outputLabel for="busca" value="Pesquisar:"/>
+                <ice:inputText id="busca"
+                               value="#{consultaBean.busca}"
+                               size="100"
+                               styleClass="ui-inputfield"
+                               label="Pesquisar"
+                               maxlength="100"
+                               required="false"
+                               valueChangeListener="#{consultaBean.buscaTextChanged}" 
+                               partialSubmit="true"
+                               />
+                
+                
+                
+            </ice:panelGroup>
             <h:panelGroup style="text-align: left; margin-bottom: 10px;" layout="block">
                 <ice:dataTable 
                     value="#{consultaBean.revendedoresDataModel}"

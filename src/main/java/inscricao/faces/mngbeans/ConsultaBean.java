@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import utfpr.faces.support.PageBean;
@@ -24,11 +25,9 @@ import utfpr.faces.support.PageBean;
 @RequestScoped
 public class ConsultaBean extends PageBean {
     
-    private Long cpf;
-    private boolean cpfInvalido = false;
     private ListDataModel<Revendedor> revendedoresDataModel;
     private ArrayList<Revendedor> revendedores;
-    private CadastrosBean cadastrosBean;
+    private String busca;
     
     public ConsultaBean() {
         
@@ -45,31 +44,20 @@ public class ConsultaBean extends PageBean {
         this.revendedoresDataModel = revendedoresDataModel;
     }
     
-    public boolean isCpfInvalido() {
-        return cpfInvalido;
+    public String getBusca() {
+        return busca;
     }
 
-    public Long getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(Long cpf) {
-        this.cpf = cpf;
+    public void setBusca(String busca) {
+        this.busca = busca;
     }
     
-
-//    public String consultaAction() {
-//        CadastrosBean inscricoesBean = (CadastrosBean)getBean("inscricoesBean");
-//        
-//        Revendedor c = inscricoesBean.getInscricao(cpf);
-//        if (c != null) {
-//            InscricaoBean inscricaoBean = (InscricaoBean)getBean("inscricaoBean");
-//            
-//            inscricaoBean.setCandidato(c);
-//            return inscricaoBean.editarInscricao();
-//        } else {
-//            cpfInvalido = true;
-//            return "consulta";
-//        }
-//    }
+    public void buscaTextChanged(ValueChangeEvent event) {
+        String filtro = (String) event.getNewValue();
+        
+        RevendedorJpaController rjc = new RevendedorJpaController();
+        revendedores = new ArrayList(rjc.getRevendedores(filtro));
+        revendedoresDataModel = new ListDataModel<>(revendedores);
+        
+    }
 }
