@@ -28,6 +28,8 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name="revendedor")
+@NamedQueries({
+    @NamedQuery(name = "Revendedor.findAll", query = "SELECT r FROM Revendedor r")})
 public class Revendedor implements Serializable{
     private static final long serialVersionUID = 1L;
     
@@ -77,6 +79,9 @@ public class Revendedor implements Serializable{
     private Estado estadoDeAtuacao;
 
     public Revendedor(){
+        estado = new Estado();
+        regiaoDeAtuacao = new Regiao();
+        estadoDeAtuacao = new Estado();
     }
     
     public Long getCnpj() {

@@ -37,31 +37,50 @@ public class CadastroBean extends PageBean {
     public static final String TOPLEVEL_LOOKUP_VALUE = "9999999";
     
     private Revendedor revendedor = new Revendedor();
-    private ArrayList<Regiao> regioes = new ArrayList<>();
+    private ArrayList<Regiao> regioes = null;
+    private ArrayList<Estado> estados = null;
     private transient HtmlSelectOneMenu menuRegiaoDeAtuacao;
     private transient HtmlSelectOneMenu menuEstadoDeAtuacao;
 
     public CadastroBean() throws ClassNotFoundException {
         
-        EstadoJpaController ejc = new EstadoJpaController();
+//         EstadoJpaController ejc = new EstadoJpaController();
+//        RegiaoJpaController rjc = new RegiaoJpaController();
+//        RevendedorJpaController rvjc = new RevendedorJpaController();
+//        
+//        Regiao sul = new Regiao(1,"Sul");
+//        Regiao sudeste = new Regiao(2,"Sudeste");
+//        
+//        Estado parana = new Estado(1, "Parana", sul);
+//        Estado sc = new Estado(2, "Santa Catarina", sul);
+//        Estado rg = new Estado(3, "Rio Grande do Sul", sul);
+//        
+//        Estado sp = new Estado(4, "São Paulo", sudeste);
+//        Estado rj = new Estado(5, "Rio de Janeiro", sudeste);
+//        Revendedor rev = new Revendedor();
+//        rev.setCnpj(new Long(879873));
+//        rev.setRazaoSocial("razao social");
+//        rev.setNomeFantasia("nome fantasia");
+//        rev.setEndereco("endereco");
+//        rev.setCidade("cidade");
+//        rev.setEstado(parana);
+//        rev.setRegiaoDeAtuacao(sudeste);
+//        rev.setEstadoDeAtuacao(parana);
+//        
+//        rjc.persist(sul);
+//        rjc.persist(sudeste);
+//        ejc.persist(parana);
+//        ejc.persist(sc);
+//        ejc.persist(rg);
+//        ejc.persist(sp);
+//        ejc.persist(rj);
+//        rvjc.persist(rev);
+        
         RegiaoJpaController rjc = new RegiaoJpaController();
-        RevendedorJpaController rvjc = new RevendedorJpaController();
+        regioes = new ArrayList(rjc.getRegioes());
         
-        Regiao sudeste = new Regiao(2,"Sudeste");
-        Estado parana = new Estado(2, "São Paulo", sudeste);
-        Revendedor rev = new Revendedor();
-        rev.setCnpj(new Long(879873));
-        rev.setRazaoSocial("razao social");
-        rev.setNomeFantasia("nome fantasia");
-        rev.setEndereco("endereco");
-        rev.setCidade("cidade");
-        rev.setEstado(parana);
-        rev.setRegiaoDeAtuacao(sudeste);
-        rev.setEstadoDeAtuacao(parana);
-        
-        rjc.persist(sudeste);
-        ejc.persist(parana);
-        rvjc.persist(rev);
+        EstadoJpaController ejc = new EstadoJpaController();
+        estados = new ArrayList(ejc.getEstados());
     }
 
     public Revendedor getRevendedor() {
@@ -77,15 +96,13 @@ public class CadastroBean extends PageBean {
     }
 
     public List<Estado> getEstados() {
-
-        ArrayList<Estado> todosEstados = new ArrayList<>();
-        return todosEstados;
+        return estados;
     }
-
-    public List<Estado> getRegiaoEstados() {
-
-        ArrayList<Estado> todosEstados = new ArrayList<>();
-        return todosEstados;
+    
+    public List<Estado> getEstados(Regiao r) {
+        
+        EstadoJpaController ejc = new EstadoJpaController();
+        return new ArrayList(ejc.getEstados(r));
     }
 
     public HtmlSelectOneMenu getMenuRegiaoDeAtuacao() {
@@ -129,12 +146,12 @@ public class CadastroBean extends PageBean {
         String id = (String) event.getNewValue();
         int iid = Integer.parseInt((String) event.getNewValue());
 
-//        revendedor.setEstadoDeAtuacao(null);
-//        for (Estado estado: revendedor.getRegiaoDeAtuacao().getEstados()) {
-//            if (estado.getCodigo() == iid) {
-//                revendedor.setEstadoDeAtuacao(estado);
-//            }
-//        }
+        revendedor.setEstadoDeAtuacao(null);
+        for (Estado estado: getEstados(revendedor.getRegiaoDeAtuacao())) {
+            if (estado.getCodigo() == iid) {
+                revendedor.setEstadoDeAtuacao(estado);
+            }
+        }
     }
     
     private void resetRegiaoDeAtuacaoMenu(HtmlSelectOneMenu menu, int id) {
@@ -146,11 +163,11 @@ public class CadastroBean extends PageBean {
             }
         }
 
-//        List<SelectItem> list = createSelectItemsEstados(revendedor.getRegiaoDeAtuacao().getEstados());
-//        UISelectItems items = new UISelectItems();
-//        items.setValue(list);
-//        menu.getChildren().add(items);
-//        menu.setVisible(true);
+        List<SelectItem> list = createSelectItemsEstados(getEstados(revendedor.getRegiaoDeAtuacao()));
+        UISelectItems items = new UISelectItems();
+        items.setValue(list);
+        menu.getChildren().add(items);
+        menu.setVisible(true);
     }
 
     private List<SelectItem> createSelectItemsEstados(List<Estado> estados) {
@@ -185,7 +202,7 @@ public class CadastroBean extends PageBean {
     
     public String cadastroAction() {
 
-        CadastrosBean cadastrosBean = (CadastrosBean) getBean("cadastrosBean");
+//        CadastrosBean cadastrosBean = (CadastrosBean) getBean("cadastrosBean");
 
 //        if (editarInscricao) {
 //            if (inscricoesBean.atualizarInscricao(candidato))
@@ -194,10 +211,13 @@ public class CadastroBean extends PageBean {
 //                return null;
 //
 //        } else {
-        if (cadastrosBean.adicionarCadastro(revendedor)) {
+        
+        RevendedorJpaController rjc = new RevendedorJpaController();
+        try {
+            rjc.persist(revendedor);
             revendedor = new Revendedor();
             return "consulta";
-        } else {
+        } catch (Exception e) {
             return "cadastro";
         }
     }

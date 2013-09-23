@@ -11,6 +11,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
+import utfpr.persistence.controller.RevendedorJpaController;
 import utfpr.util.DigitoVerificadorCPF;
 
 /**
@@ -22,7 +23,7 @@ public class CNPJValidator implements Validator {
 
     @Override
     public void validate(FacesContext fc, UIComponent uic, Object o) throws ValidatorException {
-        String cnpj = String.format("%014d", (Long) o);
+            String cnpj = String.format("%014d", (Long) o);
         if (!cnpj.matches("\\d{14}")) {        
             throw new ValidatorException(new FacesMessage("CNPJ \'" + cnpj + "\' em formato incorreto."));
         } else {
@@ -30,11 +31,8 @@ public class CNPJValidator implements Validator {
                 throw new ValidatorException(new FacesMessage("CNPJ \'" + cnpj + "\' em formato incorreto."));
             }
             
-            CadastrosBean cadastrosBean = (CadastrosBean) 
-                    FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(
-                    FacesContext.getCurrentInstance(), "#{cadastrosBean}", Object.class);
-            
-            if (cadastrosBean.existeCadastro(Long.parseLong(cnpj))) {
+            RevendedorJpaController rjc = new RevendedorJpaController();
+            if (rjc.exists(Long.parseLong(cnpj))) {
                 throw new ValidatorException(new FacesMessage("CNPJ já cadastrado."));
             }
             

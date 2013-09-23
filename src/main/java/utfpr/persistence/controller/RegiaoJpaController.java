@@ -7,6 +7,7 @@ package utfpr.persistence.controller;
 //import inscricao.persistence.entity.Idioma;
 import inscricao.persistence.entity.Estado;
 import inscricao.persistence.entity.Regiao;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -31,6 +32,21 @@ public class RegiaoJpaController extends JpaController {
             em.persist(r);
             em.getTransaction().commit();
             
+        } finally {
+            if (em != null) em.close();
+        }
+    }
+    
+    public List<Regiao> getRegioes() {
+        EntityManager em = null;        
+        try {
+            em = getEntityManager();
+        
+            // JPQL
+            TypedQuery<Regiao> q = em.createNamedQuery("Regiao.findAll", Regiao.class);
+            List<Regiao> regioes = q.getResultList();
+
+            return regioes;
         } finally {
             if (em != null) em.close();
         }

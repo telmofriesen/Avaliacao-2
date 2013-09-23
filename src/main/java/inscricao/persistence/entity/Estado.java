@@ -27,8 +27,8 @@ import inscricao.persistence.entity.Regiao;
  */
 @Entity
 @Table(name="estado")
-//@NamedQueries({
-//    @NamedQuery(name = "Estado.findAll", query = "SELECT e FROM estado e")})
+@NamedQueries({
+    @NamedQuery(name = "Estado.findAll", query = "SELECT e FROM Estado e")})
 public class Estado implements Serializable{
     private static final long serialVersionUID = 1L;
     

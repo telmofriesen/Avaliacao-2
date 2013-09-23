@@ -35,4 +35,34 @@ public class RevendedorJpaController extends JpaController {
             if (em != null) em.close();
         }
     }
+    
+    public List<Revendedor> getRevendedores() {
+        EntityManager em = null;        
+        try {
+            em = getEntityManager();
+        
+            // JPQL
+            TypedQuery<Revendedor> q = em.createNamedQuery("Revendedor.findAll", Revendedor.class);
+            List<Revendedor> regioes = q.getResultList();
+
+            return regioes;
+        } finally {
+            if (em != null) em.close();
+        }
+    }
+    
+    public boolean exists(Long cnpj) {
+        EntityManager em = null;        
+        try {
+            em = getEntityManager();
+        
+            // JPQL
+            TypedQuery<Revendedor> q = em.createQuery("SELECT r FROM Revendedor r WHERE r.cnpj = :cnpj", Revendedor.class);
+            q.setParameter("cnpj", cnpj);
+            return q.getResultList().size() > 0;
+
+        } finally {
+            if (em != null) em.close();
+        }
+    }
 }

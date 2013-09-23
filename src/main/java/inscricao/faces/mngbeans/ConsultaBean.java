@@ -5,6 +5,7 @@
 package inscricao.faces.mngbeans;
 
 import inscricao.persistence.entity.Revendedor;
+import utfpr.persistence.controller.RevendedorJpaController;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,23 +26,23 @@ public class ConsultaBean extends PageBean {
     
     private Long cpf;
     private boolean cpfInvalido = false;
-
     private ListDataModel<Revendedor> revendedoresDataModel;
-
+    private ArrayList<Revendedor> revendedores;
+    private CadastrosBean cadastrosBean;
+    
+    public ConsultaBean() {
+        
+        RevendedorJpaController rjc = new RevendedorJpaController();
+        revendedores = new ArrayList(rjc.getRevendedores());
+        revendedoresDataModel = new ListDataModel<>(revendedores);
+    }
+    
     public ListDataModel<Revendedor> getRevendedoresDataModel() {
         return revendedoresDataModel;
     }
 
     public void setRevendedoresDataModel(ListDataModel<Revendedor> revendedoresDataModel) {
         this.revendedoresDataModel = revendedoresDataModel;
-    }
-    private ArrayList<Revendedor> revendedores;
-    private CadastrosBean cadastrosBean;
-    
-    public ConsultaBean() {
-        cadastrosBean = (CadastrosBean)getBean("cadastrosBean");
-        revendedores = cadastrosBean.getCadastros();
-        revendedoresDataModel = new ListDataModel<>(revendedores);
     }
     
     public boolean isCpfInvalido() {
