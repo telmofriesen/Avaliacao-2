@@ -12,4 +12,12 @@
         maxWait="10000"
         removeAbandoned="true"
         logAbandoned="true"         />
+    
+    <Realm className="org.apache.catalina.realm.JDBCRealm" 
+         driverName="org.postgresql.Driver"
+         connectionURL="jdbc:postgresql://localhost:5432/inscricao"
+         userTable="usuarios" userNameCol="login" userCredCol="senha"
+         connectionPassword="password" 
+         connectionName="postgres"
+         userRoleTable="roles" roleNameCol="role"/>
 </Context>
