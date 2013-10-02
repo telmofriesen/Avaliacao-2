@@ -61,11 +61,15 @@ public class InscricaoJpaController extends JpaController {
             em = getEntityManager();
         
             // API criterios
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Inscricao> cq = cb.createQuery(Inscricao.class);
-            Root<Inscricao> rt = cq.from(Inscricao.class);
+//            CriteriaBuilder cb = em.getCriteriaBuilder();
+//            CriteriaQuery<Inscricao> cq = cb.createQuery(Inscricao.class);
+//            Root<Inscricao> rt = cq.from(Inscricao.class);
 //            cq.where(cb.like(rt.get(Inscricao_.nome), "%"+filtro+"%"));
-            TypedQuery<Inscricao> q = em.createQuery(cq);
+//            TypedQuery<Inscricao> q = em.createQuery(cq);
+            // JPQL
+            TypedQuery<Inscricao> q = em.createQuery("SELECT i FROM Inscricao i WHERE i.nome LIKE :filtro", Inscricao.class);
+            q.setParameter("filtro", "%"+ filtro +"%");
+            
             List<Inscricao> inscricoes = q.getResultList();
 
             return inscricoes;
@@ -80,13 +84,17 @@ public class InscricaoJpaController extends JpaController {
             em = getEntityManager();
         
             // API criterios
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Inscricao> cq = cb.createQuery(Inscricao.class);
-            Root<Inscricao> rt = cq.from(Inscricao.class);
+//            CriteriaBuilder cb = em.getCriteriaBuilder();
+//            CriteriaQuery<Inscricao> cq = cb.createQuery(Inscricao.class);
+//            Root<Inscricao> rt = cq.from(Inscricao.class);
 //            cq.where(cb.equal(rt.get(Inscricao_.numero), numero));
-            TypedQuery<Inscricao> q = em.createQuery(cq);
-            Inscricao inscricao = q.getSingleResult();
+//            TypedQuery<Inscricao> q = em.createQuery(cq);
+            // JPQL
+            TypedQuery<Inscricao> q = em.createQuery("SELECT i FROM Inscricao i WHERE i.numero = :numero", Inscricao.class);
+            q.setParameter("numero", numero);
 
+            Inscricao inscricao = q.getSingleResult();
+            
             return inscricao;
         } finally {
             if (em != null) em.close();
@@ -99,14 +107,16 @@ public class InscricaoJpaController extends JpaController {
             em = getEntityManager();
         
             // API criterios
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Inscricao> cq = cb.createQuery(Inscricao.class);
-            Root<Inscricao> rt = cq.from(Inscricao.class);
+//            CriteriaBuilder cb = em.getCriteriaBuilder();
+//            CriteriaQuery<Inscricao> cq = cb.createQuery(Inscricao.class);
+//            Root<Inscricao> rt = cq.from(Inscricao.class);
 //            cq.where(cb.equal(rt.get(Inscricao_.cpf), cpf));
-            TypedQuery<Inscricao> q = em.createQuery(cq);
-            Inscricao inscricao = q.getSingleResult();
+//            TypedQuery<Inscricao> q = em.createQuery(cq);
             // JPQL
+            TypedQuery<Inscricao> q = em.createQuery("SELECT i FROM Inscricao i WHERE i.cpf = :cpf", Inscricao.class);
+            q.setParameter("cpf", cpf);
             
+            Inscricao inscricao = q.getSingleResult();
 
             return inscricao;
         } finally {
@@ -120,14 +130,18 @@ public class InscricaoJpaController extends JpaController {
             em = getEntityManager();
         
              // API criterios
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<InscricaoMinicurso> cq = cb.createQuery(InscricaoMinicurso.class);
-            Root<InscricaoMinicurso> rt = cq.from(InscricaoMinicurso.class);
+//            CriteriaBuilder cb = em.getCriteriaBuilder();
+//            CriteriaQuery<InscricaoMinicurso> cq = cb.createQuery(InscricaoMinicurso.class);
+//            Root<InscricaoMinicurso> rt = cq.from(InscricaoMinicurso.class);
 //            Join<InscricaoMinicurso, Inscricao> join = rt.join(InscricaoMinicurso_.numero_inscricao); // Default is inner
 //            cq.select(InscricaoMinicurso.class).distinct(true);
-            TypedQuery<InscricaoMinicurso> q = em.createQuery(cq);
+//            TypedQuery<InscricaoMinicurso> q = em.createQuery(cq);
+            // JPQL
+            TypedQuery<InscricaoMinicurso> q = em.createQuery("SELECT i FROM InscricaoMinicurso i WHERE i.numero_inscricao = :numero_inscricao", InscricaoMinicurso.class);
+            q.setParameter("numero_inscricao", inscricao.getNumero());
+            
             List<InscricaoMinicurso> inscricoes_minicurso = q.getResultList();
-
+                    
             return inscricoes_minicurso;
         } finally {
             if (em != null) em.close();
