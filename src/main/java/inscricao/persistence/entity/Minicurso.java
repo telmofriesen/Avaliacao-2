@@ -55,8 +55,6 @@ public class Minicurso implements Serializable {
     @Column(name = "vagas")
     private int vagas;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "minicurso1")
-    private Collection<EsperaMinicurso> esperaMinicursoCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "minicurso1")
     private Collection<InscricaoMinicurso> inscricaoMinicursoCollection;
 
     public Minicurso() {
@@ -103,15 +101,6 @@ public class Minicurso implements Serializable {
 
     public void setVagas(int vagas) {
         this.vagas = vagas;
-    }
-
-    @XmlTransient
-    public Collection<EsperaMinicurso> getEsperaMinicursoCollection() {
-        return esperaMinicursoCollection;
-    }
-
-    public void setEsperaMinicursoCollection(Collection<EsperaMinicurso> esperaMinicursoCollection) {
-        this.esperaMinicursoCollection = esperaMinicursoCollection;
     }
 
     @XmlTransient

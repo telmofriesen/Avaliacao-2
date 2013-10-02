@@ -125,17 +125,6 @@ public class Inscricao implements Serializable {
     @NotNull
     @Column(name = "situacao")
     private int situacao;
-    @JoinColumn(name = "categoria", referencedColumnName = "codigo")
-    @ManyToOne(optional = false)
-    private Categoria categoria;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "inscricao")
-    private Collection<InscricaoVisita> inscricaoVisitaCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "inscricao")
-    private Collection<EsperaMinicurso> esperaMinicursoCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "inscricao")
-    private Collection<InscricaoMinicurso> inscricaoMinicursoCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "numeroInscricao")
-    private Collection<InscricaoPagamento> inscricaoPagamentoCollection;
 
     public Inscricao() {
     }
@@ -286,50 +275,6 @@ public class Inscricao implements Serializable {
 
     public void setSituacao(int situacao) {
         this.situacao = situacao;
-    }
-
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
-
-    @XmlTransient
-    public Collection<InscricaoVisita> getInscricaoVisitaCollection() {
-        return inscricaoVisitaCollection;
-    }
-
-    public void setInscricaoVisitaCollection(Collection<InscricaoVisita> inscricaoVisitaCollection) {
-        this.inscricaoVisitaCollection = inscricaoVisitaCollection;
-    }
-
-    @XmlTransient
-    public Collection<EsperaMinicurso> getEsperaMinicursoCollection() {
-        return esperaMinicursoCollection;
-    }
-
-    public void setEsperaMinicursoCollection(Collection<EsperaMinicurso> esperaMinicursoCollection) {
-        this.esperaMinicursoCollection = esperaMinicursoCollection;
-    }
-
-    @XmlTransient
-    public Collection<InscricaoMinicurso> getInscricaoMinicursoCollection() {
-        return inscricaoMinicursoCollection;
-    }
-
-    public void setInscricaoMinicursoCollection(Collection<InscricaoMinicurso> inscricaoMinicursoCollection) {
-        this.inscricaoMinicursoCollection = inscricaoMinicursoCollection;
-    }
-
-    @XmlTransient
-    public Collection<InscricaoPagamento> getInscricaoPagamentoCollection() {
-        return inscricaoPagamentoCollection;
-    }
-
-    public void setInscricaoPagamentoCollection(Collection<InscricaoPagamento> inscricaoPagamentoCollection) {
-        this.inscricaoPagamentoCollection = inscricaoPagamentoCollection;
     }
 
     @Override
