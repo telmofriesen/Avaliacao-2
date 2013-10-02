@@ -50,25 +50,33 @@
             </ice:panelGroup>
             <h:panelGroup style="text-align: left; margin-bottom: 10px;" layout="block">
                 <ice:dataTable 
-                    value="#{consultaBean.revendedoresDataModel}"
-                    var="revendedor"
+                    value="#{consultaBean.inscricoesDataModel}"
+                    var="inscricao"
                     >
                     
                     <ice:column>
                         <f:facet name="header">
-                            <ice:commandSortHeader columnName="cnpj">
-                               CNPJ
+                            <ice:commandSortHeader columnName="numero">
+                               Numero de inscrição
                             </ice:commandSortHeader>
                         </f:facet>
-                        #{revendedor.cnpj}
+                        #{inscricao.numero}
                     </ice:column>
                     <ice:column>
                         <f:facet name="header">
-                            <ice:commandSortHeader columnName="nomeFantasia">
-                               Nome Fantasia
+                            <ice:commandSortHeader columnName="cpf">
+                               CPF
                             </ice:commandSortHeader>
                         </f:facet>
-                        #{revendedor.nomeFantasia}
+                        #{inscricao.cpf}
+                    </ice:column>
+                    <ice:column>
+                        <f:facet name="header">
+                            <ice:commandSortHeader columnName="nome">
+                               Nome
+                            </ice:commandSortHeader>
+                        </f:facet>
+                        #{inscricao.nome}
                     </ice:column>
                     <ice:column>
                         <f:facet name="header">
@@ -76,7 +84,7 @@
                                Cidade
                             </ice:commandSortHeader>
                         </f:facet>
-                        #{revendedor.cidade}
+                        #{inscricao.cidade}
                     </ice:column>
                     <ice:column>
                         <f:facet name="header">
@@ -84,7 +92,7 @@
                                Estado
                             </ice:commandSortHeader>
                         </f:facet>
-                        #{revendedor.estadoDeAtuacao.descricao}
+                        #{inscricao.estado}
                     </ice:column>
                 </ice:dataTable> 
             </h:panelGroup>

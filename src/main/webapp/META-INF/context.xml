@@ -4,20 +4,13 @@
         name="jdbc/exemplo-jsf"
         type="javax.sql.DataSource"
         driverClassName="org.postgresql.Driver" 
-        url="jdbc:postgresql://localhost:5432/inscricao"
-        username="postgres"
-        password="password"
+        url="jdbc:postgresql://dev.ct.utfpr.edu.br:5432/cema"
+        username="aluno01"
+        password="aluno01"
         maxActive="5"
         maxIdle="3"
         maxWait="10000"
         removeAbandoned="true"
         logAbandoned="true"         />
     
-    <Realm className="org.apache.catalina.realm.JDBCRealm" 
-         driverName="org.postgresql.Driver"
-         connectionURL="jdbc:postgresql://localhost:5432/inscricao"
-         userTable="usuarios" userNameCol="login" userCredCol="senha"
-         connectionPassword="password" 
-         connectionName="postgres"
-         userRoleTable="roles" roleNameCol="role"/>
 </Context>

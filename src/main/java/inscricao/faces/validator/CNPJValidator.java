@@ -10,7 +10,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
-import utfpr.persistence.controller.RevendedorJpaController;
+import utfpr.persistence.controller.InscricaoJpaController;
 import utfpr.util.DigitoVerificadorCPF;
 
 /**
@@ -30,7 +30,7 @@ public class CNPJValidator implements Validator {
                 throw new ValidatorException(new FacesMessage("CNPJ \'" + cnpj + "\' em formato incorreto."));
             }
             
-            RevendedorJpaController rjc = new RevendedorJpaController();
+            InscricaoJpaController rjc = new InscricaoJpaController();
             if (rjc.exists(Long.parseLong(cnpj))) {
                 throw new ValidatorException(new FacesMessage("CNPJ já cadastrado."));
             }

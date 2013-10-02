@@ -3,9 +3,9 @@
   <persistence-unit name="InscricaoPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <non-jta-data-source>java:/comp/env/jdbc/exemplo-jsf</non-jta-data-source>
-    <class>inscricao.persistence.entity.Estado</class>
-    <class>inscricao.persistence.entity.Regiao</class>
-    <class>inscricao.persistence.entity.Revendedor</class>
+    <class>inscricao.persistence.entity.InscricaoMinicurso</class>
+    <class>inscricao.persistence.entity.Inscricao</class>
+    <class>inscricao.persistence.entity.Minicurso</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <shared-cache-mode>ALL</shared-cache-mode>
     <properties>

@@ -4,31 +4,32 @@
  */
 package utfpr.persistence.controller;
 
-//import inscricao.persistence.entity.Idioma;
-import inscricao.persistence.entity.Estado;
-import inscricao.persistence.entity.Revendedor;
+import inscricao.persistence.entity.Inscricao;
+import inscricao.persistence.entity.InscricaoMinicurso;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Root;
 
 /**
  *
  * @author Wilson
  */
-public class RevendedorJpaController extends JpaController {
+public class InscricaoJpaController extends JpaController {
 
-    public RevendedorJpaController() {
+    public InscricaoJpaController() {
     }
 
-    public void persist(Revendedor r) {
+    public void persist(Inscricao i) {
         EntityManager em = null;        
         try {
             em = getEntityManager();
             
             em.getTransaction().begin();
-            em.persist(r);
+            em.persist(i);
             em.getTransaction().commit();
             
         } finally {
@@ -36,54 +37,114 @@ public class RevendedorJpaController extends JpaController {
         }
     }
     
-    public List<Revendedor> getRevendedores() {
+    public List<Inscricao> getInscricoes() {
         EntityManager em = null;        
         try {
             em = getEntityManager();
         
-            // JPQL
-            TypedQuery<Revendedor> q = em.createNamedQuery("Revendedor.findAll", Revendedor.class);
-            List<Revendedor> regioes = q.getResultList();
+             // API criterios
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Inscricao> cq = cb.createQuery(Inscricao.class);
+            Root<Inscricao> rt = cq.from(Inscricao.class);
+            TypedQuery<Inscricao> q = em.createQuery(cq);
+            List<Inscricao> inscricoes = q.getResultList();
 
-            return regioes;
+            return inscricoes;
         } finally {
             if (em != null) em.close();
         }
     }
     
-    public List<Revendedor> getRevendedores(String filtro) {
+    public List<Inscricao> getInscricoes(String filtro) {
         EntityManager em = null;        
         try {
             em = getEntityManager();
         
-            // JPQL
-            TypedQuery<Revendedor> q = em.createQuery("SELECT r FROM Revendedor r WHERE r.cnpj = :filtroCnpj OR r.nomeFantasia LIKE :filtro OR r.cidade LIKE :filtro OR r.estadoDeAtuacao.descricao LIKE :filtro", Revendedor.class);
-            try {
-                q.setParameter("filtroCnpj", Long.parseLong(filtro));
-            } catch (NumberFormatException e) {
-                q.setParameter("filtroCnpj", new Long(-1));
-            }
-            q.setParameter("filtro", "%"+ filtro +"%");
-            List<Revendedor> regioes = q.getResultList();
+            // API criterios
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Inscricao> cq = cb.createQuery(Inscricao.class);
+            Root<Inscricao> rt = cq.from(Inscricao.class);
+//            cq.where(cb.like(rt.get(Inscricao_.nome), "%"+filtro+"%"));
+            TypedQuery<Inscricao> q = em.createQuery(cq);
+            List<Inscricao> inscricoes = q.getResultList();
 
-            return regioes;
+            return inscricoes;
+        } finally {
+            if (em != null) em.close();
+        }
+    }
+    
+    public Inscricao getInscricoes(Integer numero) {
+        EntityManager em = null;        
+        try {
+            em = getEntityManager();
+        
+            // API criterios
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Inscricao> cq = cb.createQuery(Inscricao.class);
+            Root<Inscricao> rt = cq.from(Inscricao.class);
+//            cq.where(cb.equal(rt.get(Inscricao_.numero), numero));
+            TypedQuery<Inscricao> q = em.createQuery(cq);
+            Inscricao inscricao = q.getSingleResult();
+
+            return inscricao;
+        } finally {
+            if (em != null) em.close();
+        }
+    }
+    
+    public Inscricao getInscricoes(long cpf) {
+        EntityManager em = null;        
+        try {
+            em = getEntityManager();
+        
+            // API criterios
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Inscricao> cq = cb.createQuery(Inscricao.class);
+            Root<Inscricao> rt = cq.from(Inscricao.class);
+//            cq.where(cb.equal(rt.get(Inscricao_.cpf), cpf));
+            TypedQuery<Inscricao> q = em.createQuery(cq);
+            Inscricao inscricao = q.getSingleResult();
+
+            return inscricao;
+        } finally {
+            if (em != null) em.close();
+        }
+    }
+    
+    public List<InscricaoMinicurso> getInscricoesMinicurso(Inscricao inscricao) {
+        EntityManager em = null;        
+        try {
+            em = getEntityManager();
+        
+             // API criterios
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<InscricaoMinicurso> cq = cb.createQuery(InscricaoMinicurso.class);
+            Root<InscricaoMinicurso> rt = cq.from(InscricaoMinicurso.class);
+//            Join<InscricaoMinicurso, Inscricao> join = rt.join(InscricaoMinicurso_.numero_inscricao); // Default is inner
+//            cq.select(InscricaoMinicurso.class).distinct(true);
+            TypedQuery<InscricaoMinicurso> q = em.createQuery(cq);
+            List<InscricaoMinicurso> inscricoes_minicurso = q.getResultList();
+
+            return inscricoes_minicurso;
         } finally {
             if (em != null) em.close();
         }
     }
     
     public boolean exists(Long cnpj) {
-        EntityManager em = null;        
-        try {
-            em = getEntityManager();
-        
-            // JPQL
-            TypedQuery<Revendedor> q = em.createQuery("SELECT r FROM Revendedor r WHERE r.cnpj = :cnpj", Revendedor.class);
-            q.setParameter("cnpj", cnpj);
-            return q.getResultList().size() > 0;
-
-        } finally {
-            if (em != null) em.close();
-        }
+//        EntityManager em = null;        
+//        try {
+//            em = getEntityManager();
+//        
+//            // JPQL
+//            TypedQuery<Revendedor> q = em.createQuery("SELECT r FROM Revendedor r WHERE r.cnpj = :cnpj", Revendedor.class);
+//            q.setParameter("cnpj", cnpj);
+//            return q.getResultList().size() > 0;
+//
+//        } finally {
+//            if (em != null) em.close();
+//        }
+        return false;
     }
 }

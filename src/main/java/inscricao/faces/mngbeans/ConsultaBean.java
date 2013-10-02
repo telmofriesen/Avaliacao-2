@@ -5,8 +5,8 @@
 package inscricao.faces.mngbeans;
 
 import com.icesoft.faces.component.ext.HtmlDataTable;
-import inscricao.persistence.entity.Revendedor;
-import utfpr.persistence.controller.RevendedorJpaController;
+import inscricao.persistence.entity.Inscricao;
+import utfpr.persistence.controller.InscricaoJpaController;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,23 +26,23 @@ import utfpr.faces.support.PageBean;
 @RequestScoped
 public class ConsultaBean extends PageBean {
     
-    private ListDataModel<Revendedor> revendedoresDataModel;
-    private ArrayList<Revendedor> revendedores;
+    private ListDataModel<Inscricao> inscricoesDataModel;
+    private ArrayList<Inscricao> inscricoes;
     private String busca;
     
     public ConsultaBean() {
         
-        RevendedorJpaController rjc = new RevendedorJpaController();
-        revendedores = new ArrayList(rjc.getRevendedores());
-        revendedoresDataModel = new ListDataModel<>(revendedores);
+        InscricaoJpaController rjc = new InscricaoJpaController();
+        inscricoes = new ArrayList(rjc.getInscricoes());
+        inscricoesDataModel = new ListDataModel<>(inscricoes);
     }
 
-    public ListDataModel<Revendedor> getRevendedoresDataModel() {
-        return revendedoresDataModel;
+    public ListDataModel<Inscricao> getInscricoesDataModel() {
+        return inscricoesDataModel;
     }
 
-    public void setRevendedoresDataModel(ListDataModel<Revendedor> revendedoresDataModel) {
-        this.revendedoresDataModel = revendedoresDataModel;
+    public void setInscricoesDataModel(ListDataModel<Inscricao> inscricoesDataModel) {
+        this.inscricoesDataModel = inscricoesDataModel;
     }
     
     public String getBusca() {
@@ -56,10 +56,10 @@ public class ConsultaBean extends PageBean {
     public void buscaTextChanged(ValueChangeEvent event) {
         String filtro = (String) event.getNewValue();
         
-        RevendedorJpaController rjc = new RevendedorJpaController();
-        revendedores = new ArrayList(rjc.getRevendedores(filtro));
+        InscricaoJpaController rjc = new InscricaoJpaController();
+        inscricoes = new ArrayList(rjc.getInscricoes(filtro));
 //        revendedoresDataModel = new ListDataModel<>(revendedores);
         
-        revendedoresDataModel.setWrappedData(revendedores);
+        inscricoesDataModel.setWrappedData(inscricoes);
     }
 }
