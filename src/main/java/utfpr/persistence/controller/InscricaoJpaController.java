@@ -105,6 +105,8 @@ public class InscricaoJpaController extends JpaController {
 //            cq.where(cb.equal(rt.get(Inscricao_.cpf), cpf));
             TypedQuery<Inscricao> q = em.createQuery(cq);
             Inscricao inscricao = q.getSingleResult();
+            // JPQL
+            
 
             return inscricao;
         } finally {
