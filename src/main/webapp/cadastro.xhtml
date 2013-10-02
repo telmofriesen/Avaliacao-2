@@ -5,6 +5,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ice="http://www.icesoft.com/icefaces/component"
                 xmlns:ace="http://www.icefaces.org/icefaces/components"
+                xmlns:util="http://java.sun.com/jsf/composite/util"
                 template="./WEB-INF/templates/layout.xhtml">
 
     <ui:define name="styles">
@@ -34,14 +35,7 @@
 
     <ui:define name="content">
         <ice:form>
-            <ice:panelGroup style="text-align: left; margin-bottom: 10px;">
-                <ice:outputLabel for="cnpj" value="CNPJ"/>
-                <ace:maskedEntry id="cnpj" value="#{cadastroBean.revendedor.cnpj}"  mask="99.999.999/9999-99"
-                             label="CNPJ" size="15" required="true">
-                    <f:validator validatorId="CNPJValidator"/>
-                    <f:converter converterId="CNPJConverter"/>
-                </ace:maskedEntry>
-            </ice:panelGroup>
+            <util:cnpjfield value="#{cadastroBean.revendedor.cnpj}" required="true" label="CNPJ Custom"/>
             <ice:panelGroup>
                 <ice:message for="cnpj" showDetail="false" showSummary="true" style="color:red;"/>
             </ice:panelGroup>
